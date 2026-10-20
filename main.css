@@ -17,9 +17,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: var(--creme);
     color: var(--texto);
-
     min-height: 100vh;
-
     display: grid;
     grid-template-columns: 220px 1fr;
     grid-template-rows: 70px 1fr 50px;
@@ -27,12 +25,9 @@ body {
 
 header {
     grid-column: 1 / -1;
-
     display: flex;
     align-items: center;
-
     padding: 0 25px;
-
     background-color: var(--verde-principal);
     color: var(--branco);
 }
@@ -42,6 +37,7 @@ header h1 {
     font-family: 'Poppins', sans-serif;
     font-size: 24px;
     font-weight: 600;
+    color: var(--branco);
 }
 
 aside {
@@ -51,6 +47,131 @@ aside {
     padding: 25px 15px;
 
     background-color: var(--verde-escuro);
+}
+
+.total-vendas {
+    margin: 0 0 25px;
+
+    font-size: 28px;
+    font-weight: 600;
+
+    color: var(--verde-principal);
+}
+
+.ultimas-vendas {
+    display: flex;
+    flex-direction: column;
+}
+
+.venda-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 0;
+
+    border-top: 1px solid var(--borda);
+}
+
+.venda-item > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cliente {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--texto);
+}
+
+.data-venda {
+    font-size: 13px;
+    color: #777777;
+}
+
+.valor-venda {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--verde-principal);
+}
+
+.resumo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.card-resumo {
+    padding: 25px;
+
+    background-color: var(--branco);
+
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+
+    box-shadow: 0px 4px 15px rgba(35, 67, 50, 0.10);
+}
+
+.card-resumo h2 {
+    margin: 0 0 20px;
+
+    font-size: 18px;
+    font-weight: 600;
+
+    color: var(--verde-principal);
+}
+
+.card-resumo > p {
+    margin: 0;
+
+    font-size: 28px;
+    font-weight: 600;
+
+    color: var(--texto);
+}
+
+.estoque-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.estoque-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid var(--borda);
+}
+
+.estoque-item span:last-child {
+    font-weight: 600;
+    color: var(--verde-principal);
+}
+
+.estoque-titulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 15px;
+}
+
+.estoque-titulo h2 {
+    margin: 0;
+
+    font-size: 18px;
+    font-weight: 600;
+
+    color: var(--verde-principal);
+}
+
+.estoque-titulo span {
+    font-size: 14px;
+    color: #777777;
 }
 
 nav {
@@ -95,6 +216,93 @@ footer {
     color: var(--branco);
 }
 
+.estoque-header {
+    margin-bottom: 25px;
+}
+
+.estoque-header h2 {
+    margin: 0 0 5px;
+
+    font-size: 24px;
+    font-weight: 600;
+
+    color: var(--verde-principal);
+}
+
+.estoque-header p {
+    margin: 0;
+
+    font-size: 15px;
+    color: #777777;
+}
+
+.estoque-tabela {
+    background-color: var(--branco);
+
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+
+    box-shadow: 0px 4px 15px rgba(35, 67, 50, 0.08);
+
+    overflow: hidden;
+}
+
+.estoque-cabecalho {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr;
+
+    padding: 15px 20px;
+
+    background-color: var(--verde-escuro);
+    color: var(--branco);
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.produto {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr;
+    align-items: center;
+
+    padding: 15px 20px;
+
+    border-bottom: 1px solid var(--borda);
+}
+
+.produto button {
+    padding: 0;
+
+    border: none;
+    background: none;
+
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    text-align: left;
+
+    color: var(--verde-principal);
+
+    cursor: pointer;
+}
+
+.produto button:hover {
+    color: var(--verde-escuro);
+    text-decoration: underline;
+}
+
+.produto span {
+    font-size: 15px;
+    color: var(--texto);
+}
+
+.produto span:nth-child(2) {
+    font-weight: 600;
+}
+
+.produto span:nth-child(3) {
+    color: #777777;
+}
+
 @media (max-width: 768px) {
 
     body {
@@ -108,6 +316,10 @@ footer {
 
     aside {
         display: none;
+    }
+
+    .resumo {
+        grid-template-columns: 1fr;
     }
 
     main {
