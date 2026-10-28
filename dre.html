@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DRE</title>
+
+    <link rel="stylesheet" href="main.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="imagens/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+
+    <header>
+        <h1>Isadora ERP</h1>
+    </header>
+
+    <aside>
+        <nav>
+            <a href="main.html">Início</a>
+            <a href="estoque.html">Estoque</a>
+            <a href="vendas.html">Vendas</a>
+            <a href="dre.html">DRE</a>
+        </nav>
+    </aside>
+
+    <main>
+
+        <section class="dre-header">
+            <h2>DRE</h2>
+            <p>Demonstrativo do Resultado do Exercício</p>
+        </section>
+
+
+<section class="dre-filtro">
+
+    <div>
+        <label for="data-inicial">Data inicial:</label>
+        <input type="date" id="data-inicial">
+    </div>
+
+    <div>
+        <label for="data-final">Data final:</label>
+        <input type="date" id="data-final">
+    </div>
+
+    <button>Consultar</button>
+
+</section>
+
+<section class="dre-resumo">
+
+    <div class="dre-card">
+        <span>Receita de vendas</span>
+        <strong>R$ 1.920,00</strong>
+    </div>
+
+    <div class="dre-card">
+        <span>Vendas à vista</span>
+        <strong>R$ 1.300,00</strong>
+    </div>
+
+    <div class="dre-card">
+        <span>Vendas a prazo</span>
+        <strong>R$ 620,00</strong>
+    </div>
+
+</section>
+
+<section class="dre-resultado">
+
+    <h3>Resultado do período</h3>
+
+    <div class="dre-linha">
+        <span>Receita de vendas</span>
+        <strong>R$ 1.920,00</strong>
+    </div>
+
+    <div class="dre-linha">
+        <span>Despesas</span>
+        <strong>R$ 0,00</strong>
+    </div>
+
+    <div class="dre-total">
+        <span>Resultado</span>
+        <strong>R$ 1.920,00</strong>
+    </div>
+
+</section>
+
+    </main>
+
+    <footer>
+        <p>&copy; Christian Dessanti. Todos os direitos reservados.</p>
+    </footer>
+
+</body>
+
+</html>
