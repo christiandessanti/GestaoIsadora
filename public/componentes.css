@@ -1,0 +1,490 @@
+/* =============================================================
+   Componentes compartilhados (formulários, tabelas, modais, avisos).
+   Usa as variáveis de cor definidas em main.css.
+   ============================================================= */
+
+/* ---------- Cabeçalho de página ---------- */
+.pagina-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.pagina-header h2 {
+    margin: 0 0 5px;
+    font-family: 'Poppins', sans-serif;
+    color: var(--verde-principal);
+}
+
+.pagina-header p {
+    margin: 0;
+    color: #777777;
+}
+
+/* ---------- Cartões ---------- */
+.cartao {
+    margin-bottom: 25px;
+    padding: 25px;
+
+    background-color: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(35, 67, 50, 0.06);
+
+    scroll-margin-top: 20px;
+}
+
+.cartao h3 {
+    margin: 0 0 15px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--verde-escuro);
+}
+
+.cartao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.cartao-header h3 {
+    margin: 0;
+}
+
+.cartao-descricao {
+    margin: -5px 0 15px;
+    font-size: 14px;
+    color: #777777;
+}
+
+.config-atalhos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.config-atalhos a {
+    padding: 6px 14px;
+
+    border: 1px solid var(--verde-principal);
+    border-radius: 20px;
+
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--verde-principal);
+}
+
+.config-atalhos a:hover {
+    background-color: var(--verde-principal);
+    color: var(--branco);
+}
+
+/* ---------- Botões ---------- */
+.botao-primario,
+.botao-secundario,
+.botao-perigo {
+    padding: 10px 18px;
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    font-size: 15px;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.botao-primario {
+    background-color: var(--verde-principal);
+    color: var(--branco);
+}
+
+.botao-primario:hover {
+    background-color: var(--verde-escuro);
+}
+
+.botao-secundario {
+    background-color: var(--branco);
+    border-color: var(--borda);
+    color: var(--texto);
+}
+
+.botao-secundario:hover {
+    border-color: var(--verde-principal);
+    color: var(--verde-principal);
+}
+
+.botao-perigo {
+    background-color: #B3261E;
+    color: var(--branco);
+}
+
+.botao-perigo:hover {
+    background-color: #8C1D18;
+}
+
+.botao-pequeno {
+    padding: 5px 10px;
+    font-size: 13px;
+}
+
+.botao-pequeno.botao-perigo {
+    background-color: var(--branco);
+    border-color: #E3B5B2;
+    color: #B3261E;
+}
+
+.botao-pequeno.botao-perigo:hover {
+    background-color: #B3261E;
+    color: var(--branco);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+/* ---------- Formulários ---------- */
+.form-inline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    align-items: start;
+}
+
+.form-inline .form-erro,
+.form-inline .form-botoes {
+    grid-column: 1 / -1;
+}
+
+.form-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-campo label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--texto);
+}
+
+.form-campo input,
+.form-campo select,
+.form-campo textarea {
+    width: 100%;
+    padding: 10px 12px;
+
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+
+    font-size: 16px; /* 16px evita o zoom automático no iPhone */
+    font-family: inherit;
+    background-color: var(--branco);
+}
+
+.form-campo input:focus,
+.form-campo select:focus,
+.form-campo textarea:focus {
+    outline: none;
+    border-color: var(--verde-principal);
+    box-shadow: 0 0 0 3px rgba(49, 92, 69, 0.15);
+}
+
+.form-campo small {
+    font-size: 12px;
+    color: #777777;
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.form-checkbox input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--verde-principal);
+}
+
+.form-erro {
+    min-height: 0;
+    margin: 0;
+    font-size: 14px;
+    color: #B3261E;
+}
+
+.form-erro:empty {
+    display: none;
+}
+
+.form-botoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ---------- Modal ---------- */
+dialog.modal {
+    width: min(480px, calc(100vw - 30px));
+    max-height: calc(100vh - 30px);
+    padding: 0;
+
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+dialog.modal::backdrop {
+    background-color: rgba(35, 67, 50, 0.45);
+}
+
+.form-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 25px;
+}
+
+.form-modal h2 {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    color: var(--verde-principal);
+}
+
+.form-descricao {
+    margin: 0;
+    font-size: 14px;
+    color: #555555;
+}
+
+.form-modal .form-botoes {
+    margin-top: 5px;
+}
+
+/* ---------- Tabelas ---------- */
+.tabela-container {
+    overflow-x: auto;
+}
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.tabela th {
+    padding: 10px 12px;
+
+    background-color: var(--creme);
+    border-bottom: 2px solid var(--borda);
+
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #666666;
+}
+
+.tabela td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--borda);
+    vertical-align: middle;
+}
+
+.tabela tbody tr:hover {
+    background-color: #FBF9F3;
+}
+
+.tabela .col-acoes {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.tabela .col-acoes button + button {
+    margin-left: 6px;
+}
+
+.tabela .col-numero {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.linha-inativa td {
+    color: #999999;
+}
+
+.tabela-vazia {
+    margin: 10px 0;
+    padding: 20px;
+
+    border: 1px dashed var(--borda);
+    border-radius: 8px;
+
+    text-align: center;
+    color: #777777;
+}
+
+/* ---------- Etiquetas ---------- */
+.etiqueta {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.etiqueta-sucesso {
+    background-color: #E3F1E8;
+    color: var(--verde-principal);
+}
+
+.etiqueta-neutra {
+    background-color: #EEEEEE;
+    color: #666666;
+}
+
+.etiqueta-entrada {
+    background-color: #E3F1E8;
+    color: var(--verde-principal);
+}
+
+.etiqueta-saida {
+    background-color: #FBE7E6;
+    color: #B3261E;
+}
+
+/* ---------- Avisos ---------- */
+.avisos {
+    position: fixed;
+    right: 20px;
+    bottom: 70px;
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.aviso {
+    max-width: 360px;
+    padding: 12px 18px;
+
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+
+    font-size: 15px;
+    color: var(--branco);
+
+    animation: aviso-entrar 0.2s ease-out;
+}
+
+.aviso-sucesso {
+    background-color: var(--verde-principal);
+}
+
+.aviso-erro {
+    background-color: #B3261E;
+}
+
+@keyframes aviso-entrar {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+}
+
+/* ---------- Celular ---------- */
+@media (max-width: 768px) {
+
+    .pagina-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cartao {
+        padding: 18px;
+    }
+
+    .cartao-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    /* Tabelas viram "cartões": cada linha mostra rótulo e valor. */
+    .tabela thead {
+        display: none;
+    }
+
+    .tabela,
+    .tabela tbody,
+    .tabela tr,
+    .tabela td {
+        display: block;
+        width: 100%;
+    }
+
+    .tabela tr {
+        margin-bottom: 12px;
+        padding: 8px 12px;
+        border: 1px solid var(--borda);
+        border-radius: 8px;
+    }
+
+    .tabela td {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 6px 0;
+        border-bottom: none;
+        text-align: right;
+    }
+
+    .tabela td::before {
+        content: attr(data-titulo);
+        font-weight: 600;
+        color: #666666;
+        text-align: left;
+    }
+
+    .tabela .col-acoes {
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding-top: 10px;
+        white-space: normal;
+    }
+
+    .tabela .col-acoes::before {
+        display: none;
+    }
+
+    .tabela .col-acoes button + button {
+        margin-left: 0;
+    }
+
+    .botao-pequeno {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .avisos {
+        left: 15px;
+        right: 15px;
+        bottom: 60px;
+    }
+
+    .aviso {
+        max-width: none;
+    }
+}

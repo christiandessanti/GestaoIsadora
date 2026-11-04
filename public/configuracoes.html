@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações</title>
+    <link rel="icon" href="imagens/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="componentes.css">
+</head>
+<body>
+
+    <header>
+        <h1>Isadora ERP</h1>
+        <div class="usuario-logado">
+            <span id="usuario-nome"></span>
+            <button type="button" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <aside>
+        <nav>
+            <a href="main.html">Início</a>
+            <a href="estoque.html">Estoque</a>
+            <a href="vendas.html">Vendas</a>
+            <a href="dre.html">DRE</a>
+            <a href="configuracoes.html">Configurações</a>
+        </nav>
+    </aside>
+
+    <main>
+
+        <section class="pagina-header">
+            <div>
+                <h2>Configurações</h2>
+                <p>Cadastros, usuários e senhas</p>
+            </div>
+        </section>
+
+        <nav class="config-atalhos" id="config-atalhos" aria-label="Seções"></nav>
+
+        <section class="cartao" id="secao-minha-senha">
+            <h3>Minha senha</h3>
+            <form id="form-minha-senha" class="form-inline" novalidate>
+                <div class="form-campo">
+                    <label for="senha-atual">Senha atual</label>
+                    <input type="password" id="senha-atual" name="senhaAtual" autocomplete="current-password" required>
+                </div>
+                <div class="form-campo">
+                    <label for="senha-nova">Nova senha</label>
+                    <input type="password" id="senha-nova" name="novaSenha" autocomplete="new-password" minlength="8" required>
+                    <small>Mínimo de 8 caracteres.</small>
+                </div>
+                <div class="form-campo">
+                    <label for="senha-confirmacao">Confirmar nova senha</label>
+                    <input type="password" id="senha-confirmacao" name="confirmacao" autocomplete="new-password" required>
+                </div>
+                <p class="form-erro" role="alert"></p>
+                <div class="form-botoes">
+                    <button type="submit" class="botao-primario">Alterar minha senha</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="cartao somente-gestao" id="secao-senha-especial" hidden>
+            <h3>Senha especial</h3>
+            <p class="cartao-descricao">Usada para liberar exclusões. A senha do usuário TI também é aceita como senha atual.</p>
+            <form id="form-senha-especial" class="form-inline" novalidate>
+                <div class="form-campo">
+                    <label for="especial-atual">Senha especial atual</label>
+                    <input type="password" id="especial-atual" name="senhaEspecial" autocomplete="off" required>
+                </div>
+                <div class="form-campo">
+                    <label for="especial-nova">Nova senha especial</label>
+                    <input type="password" id="especial-nova" name="novaSenha" autocomplete="new-password" minlength="6" required>
+                    <small>Mínimo de 6 caracteres.</small>
+                </div>
+                <div class="form-campo">
+                    <label for="especial-confirmacao">Confirmar nova senha especial</label>
+                    <input type="password" id="especial-confirmacao" name="confirmacao" autocomplete="new-password" required>
+                </div>
+                <p class="form-erro" role="alert"></p>
+                <div class="form-botoes">
+                    <button type="submit" class="botao-primario">Alterar senha especial</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="cartao somente-gestao" id="secao-usuarios" hidden>
+            <div class="cartao-header">
+                <h3>Usuários</h3>
+                <button type="button" class="botao-primario" id="novo-usuario">+ Novo usuário</button>
+            </div>
+            <div id="lista-usuarios"></div>
+        </section>
+
+        <section class="cartao somente-gestao" id="secao-clientes" hidden>
+            <div class="cartao-header">
+                <h3>Clientes</h3>
+                <button type="button" class="botao-primario" id="novo-cliente">+ Novo cliente</button>
+            </div>
+            <div id="lista-clientes"></div>
+        </section>
+
+        <section class="cartao somente-gestao" id="secao-materias-primas" hidden>
+            <div class="cartao-header">
+                <h3>Matérias-primas (estoque)</h3>
+                <button type="button" class="botao-primario" id="nova-materia-prima">+ Nova matéria-prima</button>
+            </div>
+            <div id="lista-materias-primas"></div>
+        </section>
+
+        <section class="cartao somente-gestao" id="secao-produtos-venda" hidden>
+            <div class="cartao-header">
+                <h3>Produtos de venda</h3>
+                <button type="button" class="botao-primario" id="novo-produto-venda">+ Novo produto</button>
+            </div>
+            <div id="lista-produtos-venda"></div>
+        </section>
+
+        <section class="cartao somente-gestao" id="secao-categorias" hidden>
+            <div class="cartao-header">
+                <h3>Categorias de despesa</h3>
+                <button type="button" class="botao-primario" id="nova-categoria">+ Nova categoria</button>
+            </div>
+            <div id="lista-categorias"></div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; Christian Dessanti. Todos os direitos reservados.</p>
+    </footer>
+
+    <script type="module" src="js/configuracoes.js"></script>
+
+</body>
+</html>

@@ -8,6 +8,12 @@ import { config } from './config.js';
 import { pool } from './db.js';
 import { carregarUsuario, exigirLogin, protegerPaginas } from './middlewares/auth.js';
 import { authRouter } from './routes/auth.js';
+import { usuariosRouter } from './routes/usuarios.js';
+import { configuracoesRouter } from './routes/configuracoes.js';
+import { clientesRouter } from './routes/clientes.js';
+import { produtosVendaRouter } from './routes/produtosVenda.js';
+import { categoriasRouter } from './routes/categorias.js';
+import { materiasPrimasRouter } from './routes/materiasPrimas.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
@@ -73,6 +79,13 @@ app.use('/api/auth', authRouter);
 
 // Daqui para baixo, toda rota da API exige login.
 app.use('/api', exigirLogin);
+
+app.use('/api/usuarios', usuariosRouter);
+app.use('/api/configuracoes', configuracoesRouter);
+app.use('/api/clientes', clientesRouter);
+app.use('/api/produtos-venda', produtosVendaRouter);
+app.use('/api/categorias-despesa', categoriasRouter);
+app.use('/api/materias-primas', materiasPrimasRouter);
 
 // Rota de API inexistente.
 app.use('/api', (req, res) => {
