@@ -25,7 +25,9 @@ export function unidade(valor) {
  * Aceita "12,5", "12.5" ou 12.5. Retorna texto ("12.5") para gravar sem erro de arredondamento.
  */
 export function quantidade(valor, und, { campo = 'a quantidade', permitirZero = false } = {}) {
-    const t = String(valor ?? '').trim().replace(',', '.');
+    let t = String(valor ?? '').trim().replace(',', '.');
+    // Zeros decimais à direita não mudam o valor: "5.000" -> "5", "2.50" -> "2.5".
+    if (/^\d+\.\d+$/.test(t)) t = t.replace(/\.?0+$/, '');
     if (!t) throw invalido(`Informe ${campo}.`);
 
     if (t.startsWith('-')) throw invalido(`Não é permitido valor negativo para ${campo}.`);
@@ -56,7 +58,7 @@ export function data(valor, campo = 'a data') {
     const t = String(valor ?? '').trim();
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(t);
     const d = m && new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
-    if (!d || d.getUTCMonth() !== +m[2] - 1 || d.getUTCDate() !== +m[3]) throw invalido(`Informe ${campo} válida.`);
+    if (!d || d.getUTCMonth() !== +m[2] - 1 || d.getUTCDate() !== +m[3]) throw invalido(`${capitalizar(campo)} inválida.`);
     return t;
 }
 

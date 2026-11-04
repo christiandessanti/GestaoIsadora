@@ -4,9 +4,9 @@
  */
 export async function registrarEdicoes(conn, { tabela, registroId, antes, depois, usuarioId }) {
     for (const campo of Object.keys(depois)) {
-        const antigo = normalizar(antes[campo]);
-        const novo = normalizar(depois[campo]);
-        if (antigo === novo) continue;
+        if (normalizar(antes[campo]) === normalizar(depois[campo])) continue;
+        const antigo = paraTexto(antes[campo]);
+        const novo = paraTexto(depois[campo]);
         await conn.execute(
             `INSERT INTO historico_edicoes (tabela, registro_id, campo, valor_antigo, valor_novo, usuario_id)
              VALUES (?, ?, ?, ?, ?, ?)`,
@@ -15,6 +15,12 @@ export async function registrarEdicoes(conn, { tabela, registroId, antes, depois
     }
 }
 
+function paraTexto(v) {
+    if (v === undefined || v === null) return null;
+    return typeof v === 'object' ? JSON.stringify(v) : String(v);
+}
+
+/** Forma usada só para comparar: "12.500" e "12.5" são o mesmo valor. */
 function normalizar(v) {
     if (v === undefined || v === null) return null;
     if (typeof v === 'object') return JSON.stringify(v);

@@ -220,3 +220,52 @@ export function etiqueta(texto, tipo = 'neutra') {
 export function botaoPequeno(texto, onclick, tipo = 'secundario') {
     return el('button', { type: 'button', class: `botao-pequeno botao-${tipo}`, onclick }, texto);
 }
+
+// ---------------------------------------------------------------- Seleção múltipla (filtros)
+/**
+ * Grupo de caixas de seleção com "Marcar todos" / "Desmarcar todos". Tudo vem marcado.
+ * itens: [{ valor, rotulo, detalhe? }]
+ * valores(): null se todos estiverem marcados (= sem filtro), senão a lista dos marcados.
+ */
+export function criarSelecao({ titulo, itens, vazio = 'Nenhum item.' }) {
+    const lista = el('div', { class: 'selecao-itens-lista' });
+    const marcar = (v) => lista.querySelectorAll('input').forEach((c) => { c.checked = v; });
+
+    const elemento = el('fieldset', { class: 'selecao-itens' },
+        el('legend', {}, titulo,
+            botaoPequeno('Marcar todos', () => marcar(true)),
+            botaoPequeno('Desmarcar todos', () => marcar(false))),
+        lista);
+
+    function definirItens(novos) {
+        lista.replaceChildren(...(novos.length
+            ? novos.map((i) => el('label', { class: 'form-checkbox' },
+                el('input', { type: 'checkbox', value: i.valor, checked: true }),
+                i.rotulo, i.detalhe))
+            : [el('span', { class: 'texto-suave' }, vazio)]));
+    }
+    definirItens(itens);
+
+    return {
+        elemento,
+        definirItens,
+        titulo,
+        valores() {
+            const caixas = [...lista.querySelectorAll('input')];
+            const marcados = caixas.filter((c) => c.checked).map((c) => c.value);
+            if (caixas.length && !marcados.length) throw new Error(`Selecione pelo menos um item em "${titulo}".`);
+            return marcados.length === caixas.length ? null : marcados;
+        },
+    };
+}
+
+/** Converte texto digitado em número: aceita "1.234,56", "1234,56" e "1234.56". */
+export function lerNumero(texto) {
+    let t = String(texto ?? '').trim();
+    if (!t) return NaN;
+    if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.');
+    return Number(t);
+}
+
+/** Número para exibir num campo de texto: 5.5 -> "5,50" (casas = 2) */
+export const numeroParaCampo = (n, casas = 2) => Number(n).toFixed(casas).replace('.', ',');

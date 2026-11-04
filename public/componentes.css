@@ -519,11 +519,163 @@ dialog.modal::backdrop {
     color: var(--verde-escuro);
 }
 
+/* ---------- Vendas ---------- */
+dialog.modal-largo {
+    width: min(760px, calc(100vw - 30px));
+}
+
+.form-grade-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.venda-itens {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.venda-item {
+    display: grid;
+    grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr) minmax(0, 1.2fr) minmax(90px, auto) auto;
+    gap: 8px;
+    align-items: center;
+}
+
+.venda-item select,
+.venda-item input {
+    width: 100%;
+    padding: 9px 10px;
+
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+
+    font-size: 16px;
+    font-family: inherit;
+    background-color: var(--branco);
+}
+
+.venda-item select:focus,
+.venda-item input:focus {
+    outline: none;
+    border-color: var(--verde-principal);
+}
+
+.venda-item input.preco-sugerido {
+    background-color: #FFF8E1;
+    border-color: var(--dourado);
+}
+
+.venda-item-subtotal {
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.botao-adicionar {
+    align-self: flex-start;
+    margin-top: 4px;
+}
+
+.venda-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+
+    background-color: var(--creme);
+    border-radius: 8px;
+}
+
+.venda-total strong {
+    font-size: 22px;
+    color: var(--verde-principal);
+}
+
+.carregar-mais {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.relatorio-filtros .relatorio-selecoes {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 12px;
+}
+
+.resumo-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.resumo-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 16px;
+
+    background-color: var(--creme);
+    border-radius: 8px;
+}
+
+.resumo-card span {
+    font-size: 13px;
+    color: #666666;
+}
+
+.resumo-card strong {
+    font-size: 20px;
+    color: var(--verde-principal);
+}
+
+.relatorio-aviso {
+    margin: 10px 0 0;
+    padding: 10px 14px;
+
+    background-color: #FFF8E1;
+    border-left: 4px solid var(--dourado);
+    border-radius: 4px;
+
+    font-size: 14px;
+}
+
 /* ---------- Celular ---------- */
 @media (max-width: 768px) {
 
     .somente-desktop {
         display: none !important;
+    }
+
+    .form-grade-2 {
+        grid-template-columns: 1fr;
+    }
+
+    /* Item da venda: produto em cima; quantidade, preço, subtotal e remover embaixo. */
+    .venda-item {
+        grid-template-columns: 1fr 1fr auto;
+        padding: 10px;
+        border: 1px solid var(--borda);
+        border-radius: 8px;
+    }
+
+    .venda-item select {
+        grid-column: 1 / -1;
+    }
+
+    .venda-item-subtotal {
+        grid-column: 1 / 3;
+        text-align: left;
+    }
+
+    .venda-item button {
+        grid-column: 3;
+        grid-row: 3;
     }
 
     .pagina-header {

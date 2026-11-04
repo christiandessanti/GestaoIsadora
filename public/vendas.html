@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Vendas</title>
-
     <link rel="icon" href="imagens/favicon.ico" type="image/x-icon">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="componentes.css">
 </head>
-
 <body>
 
     <header>
@@ -39,68 +33,48 @@
 
     <main>
 
-        <section class="vendas-header">
-
+        <section class="pagina-header">
             <div>
                 <h2>Vendas</h2>
                 <p>Registro de vendas</p>
             </div>
-
-            <button class="botao-nova-venda">
-                + Registrar venda
-            </button>
-
+            <button type="button" class="botao-primario" id="nova-venda">+ Registrar venda</button>
         </section>
 
-
-        <section class="vendas-tabela">
-
-            <div class="vendas-cabecalho">
-                <span>Cliente</span>
-                <span>Valor</span>
-                <span>Pagamento</span>
-                <span>Data</span>
+        <section class="cartao">
+            <h3>Vendas mais recentes</h3>
+            <div id="lista-vendas"></div>
+            <div class="carregar-mais">
+                <button type="button" class="botao-secundario" id="carregar-mais" hidden>Carregar mais</button>
             </div>
+        </section>
 
+        <section class="cartao somente-desktop" id="secao-relatorio">
+            <h3>Relatório de vendas</h3>
 
-            <div class="venda">
+            <form id="form-relatorio" class="relatorio-filtros" novalidate>
+                <div class="form-campo">
+                    <label for="rel-inicio">Data inicial</label>
+                    <input type="date" id="rel-inicio" name="inicio" required>
+                </div>
+                <div class="form-campo">
+                    <label for="rel-fim">Data final</label>
+                    <input type="date" id="rel-fim" name="fim" required>
+                </div>
+                <div class="form-campo"></div>
 
-                <span>João da Silva</span>
+                <div id="rel-selecoes" class="relatorio-selecoes"></div>
 
-                <span>R$ 850,00</span>
+                <p class="form-erro" role="alert"></p>
 
-                <span>À vista</span>
+                <div class="form-botoes">
+                    <button type="button" class="botao-secundario" id="rel-csv">Exportar CSV</button>
+                    <button type="button" class="botao-secundario" id="rel-pdf">Exportar PDF</button>
+                    <button type="submit" class="botao-primario">Gerar relatório</button>
+                </div>
+            </form>
 
-                <span>19/10/2026</span>
-
-            </div>
-
-
-            <div class="venda">
-
-                <span>Maria Ltda.</span>
-
-                <span>R$ 620,00</span>
-
-                <span>À prazo</span>
-
-                <span>18/10/2026</span>
-
-            </div>
-
-
-            <div class="venda">
-
-                <span>Pedro & Cia</span>
-
-                <span>R$ 450,00</span>
-
-                <span>À vista</span>
-
-                <span>17/10/2026</span>
-
-            </div>
-
+            <div id="resultado-relatorio"></div>
         </section>
 
     </main>
@@ -109,34 +83,7 @@
         <p>&copy; Christian Dessanti. Todos os direitos reservados.</p>
     </footer>
 
-    <dialog class="modal-venda" open>  <!-- remover a clausula open após a implementação do JS -->
-
-    <h2>Registrar venda</h2>
-
-    <label for="cliente">Cliente:</label>
-    <input type="text" id="cliente">
-
-    <label for="valor">Valor:</label>
-    <input type="number" id="valor" step="0.01">
-
-    <label for="pagamento">Forma de pagamento:</label>
-    <select id="pagamento">
-        <option value="avista">À vista</option>
-        <option value="aprazo">À prazo</option>
-    </select>
-
-    <label for="data-venda">Data da venda:</label>
-    <input type="date" id="data-venda">
-
-    <div class="botoes-modal-venda">
-        <button type="button">Cancelar</button>
-        <button type="button">Salvar</button>
-    </div>
-
-</dialog>
-
-    <script type="module" src="js/layout.js"></script>
+    <script type="module" src="js/vendas.js"></script>
 
 </body>
-
 </html>
