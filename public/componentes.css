@@ -423,8 +423,108 @@ dialog.modal::backdrop {
     to { opacity: 1; transform: none; }
 }
 
+/* ---------- Estoque e relatórios ---------- */
+.cartao-contador {
+    font-size: 14px;
+    color: #777777;
+}
+
+.texto-suave {
+    font-size: 14px;
+    color: #777777;
+}
+
+.link-produto {
+    padding: 0;
+    border: none;
+    background: none;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+    color: var(--verde-principal);
+    cursor: pointer;
+}
+
+.link-produto:hover {
+    color: var(--dourado);
+    text-decoration: underline;
+}
+
+.modal-produto {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 15px;
+
+    background-color: var(--creme);
+    border-radius: 8px;
+}
+
+.modal-produto strong {
+    font-size: 17px;
+    color: var(--verde-escuro);
+}
+
+.relatorio-filtros {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(160px, 1fr));
+    gap: 15px;
+    align-items: start;
+    margin-bottom: 20px;
+}
+
+.relatorio-filtros .selecao-itens,
+.relatorio-filtros .form-erro,
+.relatorio-filtros .form-botoes {
+    grid-column: 1 / -1;
+}
+
+.selecao-itens {
+    margin: 0;
+    padding: 12px 15px;
+
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+}
+
+.selecao-itens legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 6px;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.selecao-itens-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2px 15px;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.selecao-itens-lista .form-checkbox {
+    margin: 3px 0;
+    font-size: 14px;
+}
+
+.relatorio-titulo {
+    margin: 25px 0 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: var(--verde-escuro);
+}
+
 /* ---------- Celular ---------- */
 @media (max-width: 768px) {
+
+    .somente-desktop {
+        display: none !important;
+    }
 
     .pagina-header {
         flex-direction: column;

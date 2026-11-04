@@ -34,3 +34,32 @@ export async function api(url, { method = 'GET', body } = {}) {
     }
     return dados;
 }
+
+/**
+ * Baixa um arquivo gerado pelo servidor (PDF/CSV).
+ * Usa fetch para conseguir mostrar a mensagem de erro, se houver.
+ */
+export async function baixarArquivo(url) {
+    let resposta;
+    try {
+        resposta = await fetch(url, { credentials: 'same-origin' });
+    } catch {
+        throw new Error('Não foi possível conectar ao servidor. Verifique sua conexão.');
+    }
+    if (resposta.status === 401) {
+        window.location.href = '/';
+        return;
+    }
+    if (!resposta.ok) {
+        const dados = await resposta.json().catch(() => null);
+        throw new Error(dados?.erro ?? `Erro ${resposta.status}`);
+    }
+    const nome = /filename="([^"]+)"/.exec(resposta.headers.get('Content-Disposition') ?? '')?.[1] ?? 'arquivo';
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(await resposta.blob());
+    link.download = nome;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 10000);
+}

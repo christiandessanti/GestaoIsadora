@@ -77,7 +77,9 @@ export function avisar(mensagem, tipo = 'sucesso') {
  * aoEnviar(valores): função async; se lançar erro, a mensagem aparece no próprio formulário.
  * Retorna uma Promise com o resultado de aoEnviar, ou null se cancelado.
  */
-export function abrirFormulario({ titulo, descricao, campos, textoConfirmar = 'Salvar', perigo = false, aoEnviar }) {
+export function abrirFormulario({
+    titulo, descricao, campos, textoConfirmar = 'Salvar', perigo = false, aoEnviar, acoes, conteudoExtra,
+}) {
     return new Promise((resolve) => {
         const erro = el('p', { class: 'form-erro', role: 'alert' });
         const inputs = {};
@@ -114,15 +116,18 @@ export function abrirFormulario({ titulo, descricao, campos, textoConfirmar = 'S
                 c.ajuda && el('small', {}, c.ajuda));
         });
 
-        const botaoConfirmar = el('button', { type: 'submit', class: perigo ? 'botao-perigo' : 'botao-primario' }, textoConfirmar);
+        // "acoes" permite vários botões de envio (ex.: Entrada / Saída). A ação clicada vai para aoEnviar.
+        const botoesEnvio = (acoes ?? [{ valor: 'confirmar', texto: textoConfirmar, classe: perigo ? 'botao-perigo' : 'botao-primario' }])
+            .map((a) => el('button', { type: 'submit', value: a.valor, class: a.classe ?? 'botao-primario' }, a.texto));
         const botaoCancelar = el('button', { type: 'button', class: 'botao-secundario' }, 'Cancelar');
 
         const form = el('form', { class: 'form-modal', novalidate: true },
             el('h2', {}, titulo),
             descricao && el('p', { class: 'form-descricao' }, descricao),
+            conteudoExtra,
             ...linhas,
             erro,
-            el('div', { class: 'form-botoes' }, botaoCancelar, botaoConfirmar));
+            el('div', { class: 'form-botoes' }, botaoCancelar, ...botoesEnvio));
 
         const dialog = el('dialog', { class: 'modal' }, form);
         document.body.append(dialog);
@@ -136,6 +141,13 @@ export function abrirFormulario({ titulo, descricao, campos, textoConfirmar = 'S
         botaoCancelar.addEventListener('click', () => fechar(null));
         dialog.addEventListener('cancel', (e) => { e.preventDefault(); fechar(null); });
 
+        // Com mais de uma ação (ex.: Entrada/Saída), o Enter não envia: o usuário precisa escolher o botão.
+        if (botoesEnvio.length > 1) {
+            form.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && e.target.tagName === 'INPUT') e.preventDefault();
+            });
+        }
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             erro.textContent = '';
@@ -143,14 +155,15 @@ export function abrirFormulario({ titulo, descricao, campos, textoConfirmar = 'S
             for (const [nome, input] of Object.entries(inputs)) {
                 valores[nome] = input.type === 'checkbox' ? input.checked : input.value;
             }
-            botaoConfirmar.disabled = true;
+            const acao = e.submitter?.value ?? botoesEnvio[0].value;
+            botoesEnvio.forEach((b) => { b.disabled = true; });
             try {
-                const resultado = aoEnviar ? await aoEnviar(valores) : valores;
+                const resultado = aoEnviar ? await aoEnviar(valores, acao) : valores;
                 fechar(resultado ?? true);
             } catch (err) {
                 erro.textContent = err.message;
             } finally {
-                botaoConfirmar.disabled = false;
+                botoesEnvio.forEach((b) => { b.disabled = false; });
             }
         });
 

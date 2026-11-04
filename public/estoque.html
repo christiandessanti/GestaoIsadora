@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="componentes.css">
 </head>
 <body>
 
@@ -32,49 +33,62 @@
 
     <main>
 
-        <section class="estoque-header">
-            <h2>Estoque</h2>
-            <p>Controle de matérias-primas</p>
+        <section class="pagina-header">
+            <div>
+                <h2>Estoque</h2>
+                <p>Controle de matérias-primas</p>
+            </div>
         </section>
 
-        <section class="estoque-tabela">
-
-            <div class="estoque-cabecalho">
-                <span>Produto</span>
-                <span>Quantidade</span>
-                <span>Última alteração</span>
+        <section class="cartao">
+            <div class="cartao-header">
+                <h3>Matérias-primas</h3>
+                <span class="cartao-contador" id="contador-produtos"></span>
             </div>
+            <p class="cartao-descricao">Clique no nome do produto para registrar uma entrada ou saída.</p>
+            <div id="lista-estoque"></div>
+        </section>
 
-            <div class="produto">
-                <button>Farinha de trigo</button>
-                <span>120 kg</span>
-                <span>19/10/2026</span>
-            </div>
+        <section class="cartao somente-desktop" id="secao-relatorio">
+            <h3>Relatório de movimentações</h3>
 
-            <div class="produto">
-                <button>Açúcar</button>
-                <span>80 kg</span>
-                <span>19/10/2026</span>
-            </div>
+            <form id="form-relatorio" class="relatorio-filtros" novalidate>
+                <div class="form-campo">
+                    <label for="rel-inicio">Data inicial</label>
+                    <input type="date" id="rel-inicio" name="inicio" required>
+                </div>
+                <div class="form-campo">
+                    <label for="rel-fim">Data final</label>
+                    <input type="date" id="rel-fim" name="fim" required>
+                </div>
+                <div class="form-campo">
+                    <label for="rel-status">Produtos</label>
+                    <select id="rel-status" name="status">
+                        <option value="ativos">Somente ativos</option>
+                        <option value="ambos">Ativos e excluídos</option>
+                        <option value="excluidos">Somente excluídos</option>
+                    </select>
+                </div>
 
-            <div class="produto">
-                <button>Chocolate</button>
-                <span>35 kg</span>
-                <span>18/10/2026</span>
-            </div>
+                <fieldset class="selecao-itens">
+                    <legend>
+                        Produtos que devem aparecer
+                        <button type="button" class="botao-pequeno botao-secundario" id="rel-marcar-todos">Marcar todos</button>
+                        <button type="button" class="botao-pequeno botao-secundario" id="rel-desmarcar-todos">Desmarcar todos</button>
+                    </legend>
+                    <div class="selecao-itens-lista" id="rel-produtos"></div>
+                </fieldset>
 
-            <div class="produto">
-                <button>Manteiga</button>
-                <span>25 kg</span>
-                <span>18/10/2026</span>
-            </div>
+                <p class="form-erro" role="alert"></p>
 
-            <div class="produto">
-                <button>Leite</button>
-                <span>60 L</span>
-                <span>17/10/2026</span>
-            </div>
+                <div class="form-botoes">
+                    <button type="button" class="botao-secundario" id="rel-csv">Exportar CSV</button>
+                    <button type="button" class="botao-secundario" id="rel-pdf">Exportar PDF</button>
+                    <button type="submit" class="botao-primario">Gerar relatório</button>
+                </div>
+            </form>
 
+            <div id="resultado-relatorio"></div>
         </section>
 
     </main>
@@ -83,28 +97,7 @@
         <p>&copy; Christian Dessanti. Todos os direitos reservados.</p>
     </footer>
 
-    <dialog class="modal-estoque" open>  <!-- remover a clausula open após a implementação do JS -->
-
-    <h2>Alterar estoque</h2>
-
-    <p class="produto-modal">Farinha de trigo</p> 
-
-    <p>Estoque atual: <strong>120 kg</strong></p>
-
-    <label for="novo-estoque">Novo estoque:</label>
-
-    <div>
-        <input type="number" id="novo-estoque">
-        <span>kg</span>
-    </div>
-
-    <div>
-        <button>Cancelar</button>
-        <button>Confirmar</button>
-    </div>
-
-</dialog>
-
-    <script type="module" src="js/layout.js"></script>
+    <script type="module" src="js/estoque.js"></script>
 
 </body>
+</html>
