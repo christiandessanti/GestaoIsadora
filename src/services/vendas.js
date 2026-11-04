@@ -27,7 +27,7 @@ export function calcularSubtotalCentavos(quantidade, preco) {
  * "produtosPorId" contém os produtos que podem ser usados nesta venda.
  */
 export function validarVenda(body, { produtosPorId }) {
-    const clienteId = v.id(body?.clienteId);
+    const clienteId = v.id(body?.clienteId, 'Selecione o cliente.');
     const pagamento = body?.pagamento;
     if (!NOMES_PAGAMENTO[pagamento]) throw invalido('Selecione a forma de pagamento.');
     const dataVenda = v.data(body?.dataVenda, 'a data da venda');

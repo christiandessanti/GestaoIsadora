@@ -1,8 +1,9 @@
-import { api, baixarArquivo } from './api.js';
+import { api } from './api.js';
 import { usuarioAtual } from './layout.js';
+import { configurarRelatorio } from './paginas.js';
 import {
-    el, tabela, etiqueta, avisar, abrirFormulario,
-    formatarQuantidade, formatarDataHora, hoje, UNIDADES_INTEIRAS,
+    el, tabela, etiqueta, avisar, abrirFormulario, criarSelecao,
+    formatarQuantidade, formatarDataHora, UNIDADES_INTEIRAS,
 } from './ui.js';
 
 const gestor = ['ti', 'gerente'].includes(usuarioAtual.perfil);
@@ -71,68 +72,24 @@ async function movimentar(p) {
 
 // ================================================================ Relatório
 const form = document.querySelector('#form-relatorio');
-const erroRelatorio = form.querySelector('.form-erro');
-const listaProdutos = document.querySelector('#rel-produtos');
-
-const primeiroDiaDoMes = () => `${hoje().slice(0, 8)}01`;
-form.inicio.value = primeiroDiaDoMes();
-form.fim.value = hoje();
+const selProdutos = criarSelecao({ titulo: 'Produtos que devem aparecer', itens: [], vazio: 'Nenhum produto para este filtro.' });
+document.querySelector('#rel-selecoes').append(selProdutos.elemento);
 
 /** Atualiza as caixas de seleção conforme o status (ativos/ambos/excluídos). Tudo marcado por padrão. */
 async function carregarProdutosFiltro() {
     const produtos = await api(`/api/estoque/relatorio/produtos?status=${form.status.value}`);
-    listaProdutos.replaceChildren(...(produtos.length
-        ? produtos.map((p) => el('label', { class: 'form-checkbox' },
-            el('input', { type: 'checkbox', name: 'produto', value: p.id, checked: true }),
-            p.nome, p.excluido && etiqueta('excluído', 'neutra')))
-        : [el('span', { class: 'texto-suave' }, 'Nenhum produto para este filtro.')]));
+    selProdutos.definirItens(produtos.map((p) => ({
+        valor: p.id, rotulo: p.nome, detalhe: p.excluido && etiqueta('excluído', 'neutra'),
+    })));
 }
-
 form.status.addEventListener('change', () => carregarProdutosFiltro().catch((e) => avisar(e.message, 'erro')));
-document.querySelector('#rel-marcar-todos').addEventListener('click', () => marcarTodos(true));
-document.querySelector('#rel-desmarcar-todos').addEventListener('click', () => marcarTodos(false));
 
-function marcarTodos(marcado) {
-    for (const c of listaProdutos.querySelectorAll('input[type="checkbox"]')) c.checked = marcado;
-}
-
-/** Monta os parâmetros do relatório. Se todos estiverem marcados, envia "todos" (sem lista). */
-function parametros(formato) {
-    erroRelatorio.textContent = '';
-    if (!form.inicio.value || !form.fim.value) throw new Error('Informe a data inicial e a data final.');
-    if (form.inicio.value > form.fim.value) throw new Error('A data inicial não pode ser maior que a data final.');
-
-    const caixas = [...listaProdutos.querySelectorAll('input[type="checkbox"]')];
-    const marcados = caixas.filter((c) => c.checked).map((c) => c.value);
-    if (caixas.length && !marcados.length) throw new Error('Selecione pelo menos um produto.');
-
-    const p = new URLSearchParams({ inicio: form.inicio.value, fim: form.fim.value, status: form.status.value, formato });
-    if (marcados.length < caixas.length) p.set('produtos', marcados.join(','));
-    return p.toString();
-}
-
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    try {
-        mostrarRelatorio(await api(`/api/estoque/relatorio?${parametros('json')}`));
-    } catch (err) {
-        erroRelatorio.textContent = err.message;
-    }
+configurarRelatorio({
+    form,
+    endpoint: '/api/estoque/relatorio',
+    parametros: () => ({ status: form.status.value, produtos: selProdutos.valores() }),
+    mostrar: mostrarRelatorio,
 });
-
-for (const formato of ['csv', 'pdf']) {
-    document.querySelector(`#rel-${formato}`).addEventListener('click', async (e) => {
-        const botao = e.currentTarget;
-        botao.disabled = true;
-        try {
-            await baixarArquivo(`/api/estoque/relatorio?${parametros(formato)}`);
-        } catch (err) {
-            erroRelatorio.textContent = err.message;
-        } finally {
-            botao.disabled = false;
-        }
-    });
-}
 
 function mostrarRelatorio(rel) {
     const q = formatarQuantidade;

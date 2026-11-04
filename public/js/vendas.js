@@ -1,5 +1,6 @@
-import { api, baixarArquivo } from './api.js';
+import { api } from './api.js';
 import './layout.js';
+import { listaPaginada, configurarRelatorio } from './paginas.js';
 import {
     el, tabela, etiqueta, botaoPequeno, avisar, confirmarComSenha, criarSelecao,
     formatarMoeda, formatarQuantidade, formatarData, hoje, lerNumero, numeroParaCampo, UNIDADES_INTEIRAS,
@@ -9,58 +10,26 @@ const NOMES_PAGAMENTO = { avista: 'À vista', aprazo: 'A prazo' };
 const textoItens = (itens) => itens.map((i) => `${i.produto} (${formatarQuantidade(i.quantidade, i.unidade)})`).join(', ');
 
 // ================================================================ Lista (mais recentes primeiro)
-const lista = document.querySelector('#lista-vendas');
-const botaoMais = document.querySelector('#carregar-mais');
-let proxima = null;
-let carregando = false;
-let corpoTabela = null;
-
-const COLUNAS = [
-    { titulo: 'Data', valor: (x) => formatarData(x.data_venda) },
-    { titulo: 'Cliente', valor: (x) => x.cliente },
-    { titulo: 'Produtos', valor: (x) => textoItens(x.itens) },
-    { titulo: 'Pagamento', valor: (x) => etiqueta(NOMES_PAGAMENTO[x.pagamento], x.pagamento === 'avista' ? 'sucesso' : 'neutra') },
-    { titulo: 'Valor', classe: 'col-numero', valor: (x) => el('strong', {}, formatarMoeda(x.valor_total)) },
-    {
-        titulo: 'Ações', classe: 'col-acoes', valor: (x) => [
-            botaoPequeno('Editar', () => abrirVenda(x.id)),
-            botaoPequeno('Excluir', () => excluirVenda(x), 'perigo'),
-        ],
-    },
-];
-
-async function carregarVendas({ reiniciar = false } = {}) {
-    if (carregando) return;
-    carregando = true;
-    try {
-        if (reiniciar) proxima = null;
-        const url = proxima ? `/api/vendas?apos=${encodeURIComponent(proxima)}` : '/api/vendas';
-        const { vendas, proxima: seguinte } = await api(url);
-
-        if (reiniciar || !corpoTabela) {
-            const t = tabela(COLUNAS, vendas, { vazio: 'Nenhuma venda registrada ainda.' });
-            lista.replaceChildren(t);
-            corpoTabela = t.querySelector('tbody');
-        } else {
-            // Acrescenta as linhas da nova página à tabela existente.
-            const t = tabela(COLUNAS, vendas);
-            t.querySelectorAll('tbody tr').forEach((tr) => corpoTabela.append(tr));
-        }
-        proxima = seguinte;
-        botaoMais.hidden = !proxima;
-    } catch (err) {
-        avisar(err.message, 'erro');
-    } finally {
-        carregando = false;
-    }
-}
-
-botaoMais.addEventListener('click', () => carregarVendas());
-
-// Carrega a próxima página automaticamente quando o botão "Carregar mais" aparece na tela.
-new IntersectionObserver((entradas) => {
-    if (entradas.some((e) => e.isIntersecting) && proxima) carregarVendas();
-}, { rootMargin: '200px' }).observe(botaoMais);
+const listaVendas = listaPaginada({
+    container: document.querySelector('#lista-vendas'),
+    botaoMais: document.querySelector('#carregar-mais'),
+    url: '/api/vendas',
+    chave: 'vendas',
+    vazio: 'Nenhuma venda registrada ainda.',
+    colunas: [
+        { titulo: 'Data', valor: (x) => formatarData(x.data_venda) },
+        { titulo: 'Cliente', valor: (x) => x.cliente },
+        { titulo: 'Produtos', valor: (x) => textoItens(x.itens) },
+        { titulo: 'Pagamento', valor: (x) => etiqueta(NOMES_PAGAMENTO[x.pagamento], x.pagamento === 'avista' ? 'sucesso' : 'neutra') },
+        { titulo: 'Valor', classe: 'col-numero', valor: (x) => el('strong', {}, formatarMoeda(x.valor_total)) },
+        {
+            titulo: 'Ações', classe: 'col-acoes', valor: (x) => [
+                botaoPequeno('Editar', () => abrirVenda(x.id)),
+                botaoPequeno('Excluir', () => excluirVenda(x), 'perigo'),
+            ],
+        },
+    ],
+});
 
 // ================================================================ Formulário de venda
 async function abrirVenda(id) {
@@ -223,7 +192,7 @@ function formularioVenda({ clientes, produtos, venda }) {
             await api(venda ? `/api/vendas/${venda.id}` : '/api/vendas', { method: venda ? 'PUT' : 'POST', body: corpo });
             fechar();
             avisar(venda ? 'Venda atualizada.' : 'Venda registrada.');
-            carregarVendas({ reiniciar: true });
+            listaVendas.recarregar();
         } catch (err) {
             erro.textContent = err.message;
         } finally {
@@ -247,16 +216,11 @@ async function excluirVenda(x) {
     });
     if (ok) {
         avisar('Venda excluída.');
-        carregarVendas({ reiniciar: true });
+        listaVendas.recarregar();
     }
 }
 
 // ================================================================ Relatório
-const form = document.querySelector('#form-relatorio');
-const erroRel = form.querySelector('.form-erro');
-form.inicio.value = `${hoje().slice(0, 8)}01`;
-form.fim.value = hoje();
-
 const selPagamentos = criarSelecao({
     titulo: 'Formas de pagamento',
     itens: Object.entries(NOMES_PAGAMENTO).map(([valor, rotulo]) => ({ valor, rotulo })),
@@ -272,41 +236,16 @@ async function carregarFiltros() {
     selProdutos.definirItens(produtos.map((p) => ({ valor: p.id, rotulo: p.nome, detalhe: desativado(p.ativo) })));
 }
 
-function parametros(formato) {
-    erroRel.textContent = '';
-    if (!form.inicio.value || !form.fim.value) throw new Error('Informe a data inicial e a data final.');
-    if (form.inicio.value > form.fim.value) throw new Error('A data inicial não pode ser maior que a data final.');
-    const p = new URLSearchParams({ inicio: form.inicio.value, fim: form.fim.value, formato });
-    const filtros = { pagamentos: selPagamentos, clientes: selClientes, produtos: selProdutos };
-    for (const [nome, sel] of Object.entries(filtros)) {
-        const valores = sel.valores();
-        if (valores) p.set(nome, valores.join(','));
-    }
-    return p.toString();
-}
-
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    try {
-        mostrarRelatorio(await api(`/api/vendas/relatorio?${parametros('json')}`));
-    } catch (err) {
-        erroRel.textContent = err.message;
-    }
+configurarRelatorio({
+    form: document.querySelector('#form-relatorio'),
+    endpoint: '/api/vendas/relatorio',
+    parametros: () => ({
+        pagamentos: selPagamentos.valores(),
+        clientes: selClientes.valores(),
+        produtos: selProdutos.valores(),
+    }),
+    mostrar: mostrarRelatorio,
 });
-
-for (const formato of ['csv', 'pdf']) {
-    document.querySelector(`#rel-${formato}`).addEventListener('click', async (e) => {
-        const botao = e.currentTarget;
-        botao.disabled = true;
-        try {
-            await baixarArquivo(`/api/vendas/relatorio?${parametros(formato)}`);
-        } catch (err) {
-            erroRel.textContent = err.message;
-        } finally {
-            botao.disabled = false;
-        }
-    });
-}
 
 function mostrarRelatorio(rel) {
     const r = rel.resumo;
@@ -348,5 +287,4 @@ function mostrarRelatorio(rel) {
 }
 
 // ================================================================ Inicialização
-carregarVendas({ reiniciar: true });
 carregarFiltros().catch((e) => avisar(e.message, 'erro'));

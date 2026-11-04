@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despesas</title>
+    <link rel="icon" href="imagens/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="componentes.css">
+</head>
+<body>
+
+    <header>
+        <h1>Isadora ERP</h1>
+        <div class="usuario-logado">
+            <span id="usuario-nome"></span>
+            <button type="button" id="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <aside>
+        <nav>
+            <a href="main.html">Início</a>
+            <a href="estoque.html">Estoque</a>
+            <a href="vendas.html">Vendas</a>
+            <a href="despesas.html">Despesas</a>
+            <a href="dre.html">DRE</a>
+            <a href="configuracoes.html">Configurações</a>
+        </nav>
+    </aside>
+
+    <main>
+
+        <section class="pagina-header">
+            <div>
+                <h2>Despesas</h2>
+                <p>Registro de despesas por categoria</p>
+            </div>
+            <button type="button" class="botao-primario" id="nova-despesa">+ Registrar despesa</button>
+        </section>
+
+        <section class="cartao">
+            <h3>Despesas mais recentes</h3>
+            <div id="lista-despesas"></div>
+            <div class="carregar-mais">
+                <button type="button" class="botao-secundario" id="carregar-mais" hidden>Carregar mais</button>
+            </div>
+        </section>
+
+        <section class="cartao somente-desktop" id="secao-relatorio">
+            <h3>Relatório de despesas</h3>
+
+            <form id="form-relatorio" class="relatorio-filtros" novalidate>
+                <div class="form-campo">
+                    <label for="rel-inicio">Data inicial</label>
+                    <input type="date" id="rel-inicio" name="inicio" required>
+                </div>
+                <div class="form-campo">
+                    <label for="rel-fim">Data final</label>
+                    <input type="date" id="rel-fim" name="fim" required>
+                </div>
+                <div class="form-campo">
+                    <label for="rel-status">Categorias</label>
+                    <select id="rel-status" name="status">
+                        <option value="ativas">Somente ativas</option>
+                        <option value="ambas">Ativas e desativadas</option>
+                        <option value="desativadas">Somente desativadas</option>
+                    </select>
+                </div>
+
+                <div id="rel-selecoes" class="relatorio-selecoes"></div>
+
+                <p class="form-erro" role="alert"></p>
+
+                <div class="form-botoes">
+                    <button type="button" class="botao-secundario" id="rel-csv">Exportar CSV</button>
+                    <button type="button" class="botao-secundario" id="rel-pdf">Exportar PDF</button>
+                    <button type="submit" class="botao-primario">Gerar relatório</button>
+                </div>
+            </form>
+
+            <div id="resultado-relatorio"></div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; Christian Dessanti. Todos os direitos reservados.</p>
+    </footer>
+
+    <script type="module" src="js/despesas.js"></script>
+
+</body>
+</html>
