@@ -289,22 +289,43 @@ async function excluirCategoria(c) {
 const secoes = [{ id: 'secao-minha-senha', nome: 'Minha senha' }];
 
 if (gestor) {
-    for (const s of document.querySelectorAll('.somente-gestao')) s.hidden = false;
     ligarFormulario(document.querySelector('#form-senha-especial'), '/api/configuracoes/senha-especial', 'Senha especial alterada.');
     secoes.push(
         { id: 'secao-senha-especial', nome: 'Senha especial' },
-        { id: 'secao-usuarios', nome: 'Usuários' },
-        { id: 'secao-clientes', nome: 'Clientes' },
-        { id: 'secao-materias-primas', nome: 'Matérias-primas' },
-        { id: 'secao-produtos-venda', nome: 'Produtos de venda' },
-        { id: 'secao-categorias', nome: 'Categorias' },
+        { id: 'secao-usuarios', nome: 'Usuários', carregar: carregarUsuarios },
+        { id: 'secao-clientes', nome: 'Clientes', carregar: carregarClientes },
+        { id: 'secao-materias-primas', nome: 'Matérias-primas', carregar: carregarMateriasPrimas },
+        { id: 'secao-produtos-venda', nome: 'Produtos de venda', carregar: carregarProdutosVenda },
+        { id: 'secao-categorias', nome: 'Categorias', carregar: carregarCategorias },
     );
-    const carregamentos = [carregarUsuarios, carregarClientes, carregarMateriasPrimas, carregarProdutosVenda, carregarCategorias];
-    Promise.all(carregamentos.map((f) => f().catch((err) => avisar(err.message, 'erro'))));
 }
 
-// Atalhos para as seções (útil quando há muitas).
-if (secoes.length > 1) {
-    document.querySelector('#config-atalhos').replaceChildren(
-        ...secoes.map((s) => el('a', { href: `#${s.id}` }, s.nome)));
+// Abas: apenas a seção escolhida fica visível. A aba atual fica no endereço (#secao-...).
+const abas = document.querySelector('#config-abas');
+const botoesAba = new Map();
+
+function mostrarSecao(id) {
+    const secao = secoes.find((s) => s.id === id) ?? secoes[0];
+    for (const s of secoes) {
+        const ativa = s === secao;
+        document.getElementById(s.id).hidden = !ativa;
+        const botao = botoesAba.get(s.id);
+        botao?.classList.toggle('ativa', ativa);
+        botao?.setAttribute('aria-selected', String(ativa));
+    }
+    history.replaceState(null, '', `#${secao.id}`);
+    // Recarrega a lista sempre que a aba é aberta, para mostrar dados atualizados.
+    secao.carregar?.().catch((err) => avisar(err.message, 'erro'));
 }
+
+if (secoes.length > 1) {
+    for (const s of secoes) {
+        const botao = el('button', {
+            type: 'button', class: 'aba', role: 'tab', 'aria-controls': s.id,
+            onclick: () => mostrarSecao(s.id),
+        }, s.nome);
+        botoesAba.set(s.id, botao);
+        abas.append(botao);
+    }
+}
+mostrarSecao(location.hash.slice(1));

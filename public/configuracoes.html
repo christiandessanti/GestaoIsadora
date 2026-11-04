@@ -40,9 +40,9 @@
             </div>
         </section>
 
-        <nav class="config-atalhos" id="config-atalhos" aria-label="Seções"></nav>
+        <div class="config-abas" id="config-abas" role="tablist" aria-label="Seções das configurações"></div>
 
-        <section class="cartao" id="secao-minha-senha">
+        <section class="cartao" id="secao-minha-senha" hidden>
             <h3>Minha senha</h3>
             <form id="form-minha-senha" class="form-inline" novalidate>
                 <div class="form-campo">
@@ -65,7 +65,7 @@
             </form>
         </section>
 
-        <section class="cartao somente-gestao" id="secao-senha-especial" hidden>
+        <section class="cartao" id="secao-senha-especial" hidden>
             <h3>Senha especial</h3>
             <p class="cartao-descricao">Usada para liberar exclusões. A senha do usuário TI também é aceita como senha atual.</p>
             <form id="form-senha-especial" class="form-inline" novalidate>
@@ -89,7 +89,7 @@
             </form>
         </section>
 
-        <section class="cartao somente-gestao" id="secao-usuarios" hidden>
+        <section class="cartao" id="secao-usuarios" hidden>
             <div class="cartao-header">
                 <h3>Usuários</h3>
                 <button type="button" class="botao-primario" id="novo-usuario">+ Novo usuário</button>
@@ -97,7 +97,7 @@
             <div id="lista-usuarios"></div>
         </section>
 
-        <section class="cartao somente-gestao" id="secao-clientes" hidden>
+        <section class="cartao" id="secao-clientes" hidden>
             <div class="cartao-header">
                 <h3>Clientes</h3>
                 <button type="button" class="botao-primario" id="novo-cliente">+ Novo cliente</button>
@@ -105,7 +105,7 @@
             <div id="lista-clientes"></div>
         </section>
 
-        <section class="cartao somente-gestao" id="secao-materias-primas" hidden>
+        <section class="cartao" id="secao-materias-primas" hidden>
             <div class="cartao-header">
                 <h3>Matérias-primas (estoque)</h3>
                 <button type="button" class="botao-primario" id="nova-materia-prima">+ Nova matéria-prima</button>
@@ -113,7 +113,7 @@
             <div id="lista-materias-primas"></div>
         </section>
 
-        <section class="cartao somente-gestao" id="secao-produtos-venda" hidden>
+        <section class="cartao" id="secao-produtos-venda" hidden>
             <div class="cartao-header">
                 <h3>Produtos de venda</h3>
                 <button type="button" class="botao-primario" id="novo-produto-venda">+ Novo produto</button>
@@ -121,7 +121,7 @@
             <div id="lista-produtos-venda"></div>
         </section>
 
-        <section class="cartao somente-gestao" id="secao-categorias" hidden>
+        <section class="cartao" id="secao-categorias" hidden>
             <div class="cartao-header">
                 <h3>Categorias de despesa</h3>
                 <button type="button" class="botao-primario" id="nova-categoria">+ Nova categoria</button>
