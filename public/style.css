@@ -113,3 +113,15 @@ button {
 button:hover {
     background-color: var(--verde-escuro);
 }
+.login-container .erro-login {
+    min-height: 22px;
+    margin: -10px 0 5px;
+
+    font-size: 15px;
+    color: #B3261E;
+}
+
+button:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}

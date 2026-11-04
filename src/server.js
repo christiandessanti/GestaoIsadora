@@ -2,13 +2,23 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
 import helmet from 'helmet';
+import session from 'express-session';
+import MySQLStoreFactory from 'express-mysql-session';
 import { config } from './config.js';
 import { pool } from './db.js';
+import { carregarUsuario, exigirLogin, protegerPaginas } from './middlewares/auth.js';
+import { authRouter } from './routes/auth.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 
+const DURACAO_SESSAO_MS = 8 * 60 * 60 * 1000; // 8 horas sem uso -> precisa logar de novo
+
 const app = express();
+
+// No VPS, se houver um proxy reverso (ex.: Nginx) na frente do Node,
+// defina TRUST_PROXY=1 no .env para que o IP real do usuário seja reconhecido.
+if (process.env.TRUST_PROXY) app.set('trust proxy', Number(process.env.TRUST_PROXY) || 1);
 
 // Cabeçalhos de segurança. A política de conteúdo libera apenas o próprio
 // servidor e as fontes do Google usadas no layout.
@@ -27,22 +37,57 @@ app.use(helmet({
 
 app.use(express.json({ limit: '100kb' }));
 
-// Verificação rápida de que o servidor e o banco estão funcionando.
+// Sessões guardadas no MySQL (tabela "sessions", criada automaticamente).
+const MySQLStore = MySQLStoreFactory(session);
+const sessionStore = new MySQLStore({
+    clearExpired: true,
+    checkExpirationInterval: 15 * 60 * 1000,
+    expiration: DURACAO_SESSAO_MS,
+    createDatabaseTable: true,
+}, pool);
+
+app.use(session({
+    name: 'isadora.sid',
+    secret: config.sessionSecret,
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+    rolling: true, // renova o prazo a cada requisição
+    cookie: {
+        httpOnly: true,           // JavaScript da página não consegue ler o cookie
+        sameSite: 'lax',          // o cookie não é enviado em requisições vindas de outros sites
+        secure: config.producao,  // em produção, só trafega via HTTPS
+        maxAge: DURACAO_SESSAO_MS,
+    },
+}));
+
+app.use(carregarUsuario);
+
+// ---------------- API ----------------
 app.get('/api/health', async (req, res) => {
     await pool.query('SELECT 1');
     res.json({ ok: true });
 });
 
-// Frontend (somente o conteúdo da pasta public/ é acessível pelo navegador).
-app.use(express.static(PUBLIC_DIR, { extensions: ['html'] }));
+app.use('/api/auth', authRouter);
+
+// Daqui para baixo, toda rota da API exige login.
+app.use('/api', exigirLogin);
 
 // Rota de API inexistente.
 app.use('/api', (req, res) => {
     res.status(404).json({ erro: 'Rota não encontrada.' });
 });
 
+// ---------------- Frontend ----------------
+app.use(protegerPaginas);
+app.use(express.static(PUBLIC_DIR, { extensions: ['html'] }));
+
 // Tratamento central de erros: o detalhe vai para o log, o usuário recebe uma mensagem genérica.
 app.use((err, req, res, next) => {
+    if (err.type === 'entity.parse.failed') {
+        return res.status(400).json({ erro: 'Dados enviados em formato inválido.' });
+    }
     if (err.status && err.status < 500) {
         return res.status(err.status).json({ erro: err.message });
     }

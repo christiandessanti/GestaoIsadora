@@ -58,7 +58,7 @@ async function main() {
         const [tis] = await conn.execute("SELECT id FROM usuarios WHERE perfil = 'ti' LIMIT 1");
         if (tis.length === 0) {
             const nome = process.env.TI_NOME || 'TI';
-            const login = process.env.TI_LOGIN || 'ti';
+            const login = (process.env.TI_LOGIN || 'ti').trim().toLowerCase();
             const senha = process.env.TI_SENHA;
             if (!senha || senha.length < 8) {
                 throw new Error('Defina TI_SENHA no .env com pelo menos 8 caracteres.');
