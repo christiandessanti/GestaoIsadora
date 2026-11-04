@@ -1,0 +1,30 @@
+{
+  "name": "gestao-isadora",
+  "version": "1.0.0",
+  "description": "Isadora ERP - gestão de estoque, vendas, despesas e DRE",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "db:setup": "node src/database/setup.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "author": "Christian Dessanti",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "express-mysql-session": "^3.0.3",
+    "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
+    "mysql2": "^3.24.6",
+    "pdfkit": "^0.20.2"
+  },
+  "overrides": {
+    "mysql2": "$mysql2"
+  }
+}
