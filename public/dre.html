@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>DRE</title>
-
-    <link rel="stylesheet" href="main.css">
-
+    <link rel="icon" href="imagens/favicon.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="icon" href="imagens/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="componentes.css">
 </head>
-
 <body>
 
     <header>
@@ -35,71 +30,52 @@
             <a href="dre.html">DRE</a>
             <a href="configuracoes.html">Configurações</a>
         </nav>
-</aside>
+    </aside>
 
     <main>
 
-        <section class="dre-header">
-            <h2>DRE</h2>
-            <p>Demonstrativo do Resultado do Exercício</p>
+        <section class="pagina-header">
+            <div>
+                <h2>DRE</h2>
+                <p>Demonstrativo do Resultado do Exercício</p>
+            </div>
         </section>
 
+        <section class="cartao">
+            <form id="form-relatorio" class="relatorio-filtros" novalidate>
+                <div class="form-campo">
+                    <label for="rel-inicio">Data inicial</label>
+                    <input type="date" id="rel-inicio" name="inicio" required>
+                </div>
+                <div class="form-campo">
+                    <label for="rel-fim">Data final</label>
+                    <input type="date" id="rel-fim" name="fim" required>
+                </div>
+                <div class="form-campo">
+                    <label for="rel-status">Categorias de despesa</label>
+                    <select id="rel-status" name="status">
+                        <option value="ativas">Somente ativas</option>
+                        <option value="ambas">Ativas e desativadas</option>
+                        <option value="desativadas">Somente desativadas</option>
+                    </select>
+                </div>
 
-<section class="dre-filtro">
+                <details class="dre-filtros-avancados" id="filtros-avancados">
+                    <summary>Escolher o que aparece no DRE <span class="texto-suave">(tudo marcado por padrão)</span></summary>
+                    <div id="rel-selecoes" class="relatorio-selecoes"></div>
+                </details>
 
-    <div>
-        <label for="data-inicial">Data inicial:</label>
-        <input type="date" id="data-inicial">
-    </div>
+                <p class="form-erro" role="alert"></p>
 
-    <div>
-        <label for="data-final">Data final:</label>
-        <input type="date" id="data-final">
-    </div>
+                <div class="form-botoes">
+                    <button type="button" class="botao-secundario" id="rel-csv">Exportar CSV</button>
+                    <button type="button" class="botao-secundario" id="rel-pdf">Exportar PDF</button>
+                    <button type="submit" class="botao-primario">Consultar</button>
+                </div>
+            </form>
+        </section>
 
-    <button>Consultar</button>
-
-</section>
-
-<section class="dre-resumo">
-
-    <div class="dre-card">
-        <span>Receita de vendas</span>
-        <strong>R$ 1.920,00</strong>
-    </div>
-
-    <div class="dre-card">
-        <span>Vendas à vista</span>
-        <strong>R$ 1.300,00</strong>
-    </div>
-
-    <div class="dre-card">
-        <span>Vendas a prazo</span>
-        <strong>R$ 620,00</strong>
-    </div>
-
-</section>
-
-<section class="dre-resultado">
-
-    <h3>Resultado do período</h3>
-
-    <div class="dre-linha">
-        <span>Receita de vendas</span>
-        <strong>R$ 1.920,00</strong>
-    </div>
-
-    <div class="dre-linha">
-        <span>Despesas</span>
-        <strong>R$ 0,00</strong>
-    </div>
-
-    <div class="dre-total">
-        <span>Resultado</span>
-        <strong>R$ 1.920,00</strong>
-    </div>
-
-</section>
+        <div id="resultado-dre"></div>
 
     </main>
 
@@ -107,8 +83,7 @@
         <p>&copy; Christian Dessanti. Todos os direitos reservados.</p>
     </footer>
 
-    <script type="module" src="js/layout.js"></script>
+    <script type="module" src="js/dre.js"></script>
 
 </body>
-
 </html>

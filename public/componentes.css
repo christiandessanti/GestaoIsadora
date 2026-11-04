@@ -645,6 +645,75 @@ dialog.modal-largo {
     font-size: 14px;
 }
 
+/* ---------- DRE ---------- */
+.dre-filtros-avancados {
+    grid-column: 1 / -1;
+    padding: 10px 15px;
+
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+}
+
+.dre-filtros-avancados summary {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--verde-escuro);
+    cursor: pointer;
+}
+
+.dre-filtros-avancados[open] summary {
+    margin-bottom: 12px;
+}
+
+.dre-periodo {
+    margin: 0 0 15px;
+    font-size: 14px;
+    color: #666666;
+}
+
+main .dre-resumo {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+
+.dre-card small {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #888888;
+}
+
+.valor-despesa,
+.dre-card strong.valor-despesa,
+.dre-linha strong.valor-despesa {
+    color: #B3261E;
+}
+
+.dre-resultado {
+    margin-bottom: 25px;
+}
+
+.dre-linha-detalhe {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 35px;
+
+    font-size: 14px;
+    color: #666666;
+}
+
+.dre-total-negativo {
+    background-color: #FBE7E6;
+}
+
+.dre-total-negativo strong {
+    color: #B3261E;
+}
+
+.cartao .dre-total {
+    margin-top: 10px;
+    border-radius: 8px;
+}
+
 /* ---------- Celular ---------- */
 @media (max-width: 768px) {
 
