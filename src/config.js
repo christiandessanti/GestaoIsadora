@@ -11,6 +11,7 @@ function obrigatoria(nome) {
 
 export const config = {
     port: Number(process.env.PORT) || 3000,
+    host: process.env.HOST || '0.0.0.0',
     producao: process.env.NODE_ENV === 'production',
     sessionSecret: obrigatoria('SESSION_SECRET'),
     db: {

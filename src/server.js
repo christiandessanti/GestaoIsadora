@@ -118,6 +118,6 @@ app.use((err, req, res, next) => {
     res.status(500).json({ erro: 'Erro interno no servidor.' });
 });
 
-app.listen(config.port, () => {
+app.listen(config.port, config.host, () => {
     console.log(`Isadora ERP rodando em http://localhost:${config.port}`);
 });

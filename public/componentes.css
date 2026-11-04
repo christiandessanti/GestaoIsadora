@@ -684,7 +684,8 @@ main .dre-resumo {
 
 .valor-despesa,
 .dre-card strong.valor-despesa,
-.dre-linha strong.valor-despesa {
+.dre-linha strong.valor-despesa,
+.dre-total strong.valor-despesa {
     color: #B3261E;
 }
 

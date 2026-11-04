@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
-    "db:setup": "node src/database/setup.js"
+    "db:setup": "node src/database/setup.js",
+    "test": "node tests/executar.mjs",
+    "test:ui": "node tests/executar.mjs --ui"
   },
   "engines": {
     "node": ">=20"
@@ -26,5 +28,8 @@
   },
   "overrides": {
     "mysql2": "$mysql2"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.16.0"
   }
 }
