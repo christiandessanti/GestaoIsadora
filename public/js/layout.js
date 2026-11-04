@@ -24,3 +24,30 @@ for (const link of document.querySelectorAll('nav a')) {
     const destino = new URL(link.href).pathname.replace(/\.html$/, '');
     if (destino === paginaAtual) link.classList.add('ativo');
 }
+
+// ---------------------------------------------------------------- Celular
+// Barra de navegação fixa na parte de baixo (visível apenas em telas pequenas, via CSS).
+const ITENS_BARRA = [
+    { href: 'main.html', rotulo: 'Início', icone: '⌂' },
+    { href: 'estoque.html', rotulo: 'Estoque', icone: '▦' },
+    { href: 'vendas.html', rotulo: 'Vendas', icone: '$' },
+    { href: 'despesas.html', rotulo: 'Despesas', icone: '⇩' },
+];
+const barra = document.createElement('nav');
+barra.className = 'barra-inferior';
+barra.setAttribute('aria-label', 'Navegação principal');
+for (const item of ITENS_BARRA) {
+    const link = document.createElement('a');
+    link.href = item.href;
+    const icone = document.createElement('span');
+    icone.className = 'barra-icone';
+    icone.setAttribute('aria-hidden', 'true');
+    icone.textContent = item.icone;
+    link.append(icone, item.rotulo);
+    if (new URL(link.href).pathname.replace(/\.html$/, '') === paginaAtual) link.classList.add('ativo');
+    barra.append(link);
+}
+document.body.append(barra);
+
+// DRE e Configurações não fazem parte da versão para celular.
+if (['/dre', '/configuracoes'].includes(paginaAtual)) document.body.classList.add('pagina-somente-desktop');

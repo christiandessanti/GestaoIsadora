@@ -18,6 +18,7 @@ import { estoqueRouter } from './routes/estoque.js';
 import { vendasRouter } from './routes/vendas.js';
 import { despesasRouter } from './routes/despesas.js';
 import { dreRouter } from './routes/dre.js';
+import { inicioRouter } from './routes/inicio.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
@@ -94,6 +95,7 @@ app.use('/api/estoque', estoqueRouter);
 app.use('/api/vendas', vendasRouter);
 app.use('/api/despesas', despesasRouter);
 app.use('/api/dre', dreRouter);
+app.use('/api/inicio', inicioRouter);
 
 // Rota de API inexistente.
 app.use('/api', (req, res) => {

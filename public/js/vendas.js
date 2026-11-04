@@ -83,8 +83,8 @@ function formularioVenda({ clientes, produtos, venda }) {
             el('option', { value: '' }, 'Produto...'),
             produtos.map((p) => el('option', { value: p.id, selected: p.id === item?.produtoId }, `${p.nome} (${p.unidade})`)));
         const inpQtd = el('input', { type: 'text', inputmode: 'decimal', placeholder: 'Qtd.', 'aria-label': 'Quantidade' });
-        const inpPreco = el('input', { type: 'text', inputmode: 'decimal', placeholder: 'Preço un. (R$)', 'aria-label': 'Preço unitário' });
-        const subtotal = el('span', { class: 'venda-item-subtotal' }, formatarMoeda(0));
+        const inpPreco = el('input', { type: 'text', inputmode: 'decimal', placeholder: 'Preço (R$)', 'aria-label': 'Preço unitário' });
+        const subtotal = el('span', { class: 'item-venda-subtotal' }, formatarMoeda(0));
         const remover = el('button', { type: 'button', class: 'botao-pequeno botao-perigo', 'aria-label': 'Remover produto' }, '✕');
 
         if (item) {
@@ -93,7 +93,7 @@ function formularioVenda({ clientes, produtos, venda }) {
             inpPreco.dataset.editado = '1';
         }
 
-        const linha = el('div', { class: 'venda-item' }, selProduto, inpQtd, inpPreco, subtotal, remover);
+        const linha = el('div', { class: 'item-venda' }, selProduto, inpQtd, inpPreco, subtotal, remover);
         linha.atualizarPreco = () => {
             if (inpPreco.dataset.editado) return; // não sobrescreve o que o usuário digitou
             const ultimo = ultimosPrecos[selProduto.value];
@@ -127,17 +127,28 @@ function formularioVenda({ clientes, produtos, venda }) {
         return linha;
     }
 
+    /**
+     * Subtotal em centavos, calculado com inteiros (milésimos × centavos), igual ao servidor.
+     * Evita erros de ponto flutuante: 2,5 × 19,99 = 49,975 -> R$ 49,98 (e não 49,97).
+     */
+    function subtotalCentavos(quantidade, preco) {
+        const q = lerNumero(quantidade);
+        const p = lerNumero(preco);
+        if (!Number.isFinite(q) || !Number.isFinite(p)) return 0;
+        const milesimos = Math.round(q * 1000);
+        const centavos = Math.round(p * 100);
+        return Number((BigInt(milesimos) * BigInt(centavos) + 500n) / 1000n);
+    }
+
     function recalcular() {
         let total = 0;
         for (const linha of itensContainer.children) {
             const { quantidade, precoUnitario } = linha.dados();
-            const q = lerNumero(quantidade);
-            const p = lerNumero(precoUnitario);
-            const sub = Number.isFinite(q) && Number.isFinite(p) ? Math.round(q * p * 100) / 100 : 0;
-            linha.querySelector('.venda-item-subtotal').textContent = formatarMoeda(sub);
+            const sub = subtotalCentavos(quantidade, precoUnitario);
+            linha.querySelector('.item-venda-subtotal').textContent = formatarMoeda(sub / 100);
             total += sub;
         }
-        totalEl.textContent = formatarMoeda(total);
+        totalEl.textContent = formatarMoeda(total / 100);
     }
 
     // Ao escolher o cliente, busca o último preço praticado para cada produto.
