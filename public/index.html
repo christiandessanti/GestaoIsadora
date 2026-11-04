@@ -23,10 +23,14 @@
 
             <label for="usuario">Usuário:</label>
             <input type="text" id="usuario" name="usuario" autocomplete="username"
-                   autocapitalize="none" spellcheck="false" required>
+                   autocapitalize="characters" spellcheck="false" required>
 
             <label for="senha">Senha:</label>
-            <input type="password" id="senha" name="senha" autocomplete="current-password" required>
+            <div class="campo-senha">
+                <input type="password" id="senha" name="senha" autocomplete="current-password" required>
+                <button type="button" id="mostrar-senha" class="botao-mostrar-senha"
+                        aria-controls="senha" aria-pressed="false">Mostrar</button>
+            </div>
 
             <p id="erro-login" class="erro-login" role="alert" aria-live="polite"></p>
 

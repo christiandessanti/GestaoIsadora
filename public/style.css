@@ -125,3 +125,36 @@ button:disabled {
     opacity: 0.7;
     cursor: wait;
 }
+
+#usuario {
+    text-transform: uppercase;
+}
+
+.campo-senha {
+    position: relative;
+}
+
+.campo-senha input {
+    padding-right: 100px;
+}
+
+.campo-senha .botao-mostrar-senha {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    width: auto;
+    height: 40px;
+    margin: 0;
+    padding: 0 14px;
+
+    border: 1px solid var(--borda);
+    background-color: var(--branco);
+    color: var(--verde-principal);
+
+    font-size: 14px;
+}
+
+.campo-senha .botao-mostrar-senha:hover {
+    background-color: var(--creme);
+}
